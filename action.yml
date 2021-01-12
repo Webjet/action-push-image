@@ -1,0 +1,29 @@
+name: 'Docker Push'
+description: 'push image'
+
+inputs:
+  registry:
+    description: 'docker registry'
+    required: true
+    default: $CONTAINERREGISTRY
+  repository:
+    description: 'repository'
+    required: true
+    default: $REPOSITORY  
+  image-name:
+    description: 'docker image name'
+    required: true
+    default: $IMAGENAME
+
+runs:
+  using: "composite"
+  steps: 
+    - run: |
+        export INPUT_REGISTRY=${{ inputs.registry }}
+        export INPUT_IMAGENAME=${{ inputs.image-name }}
+        export INPUT_TAG=$TAG
+        export INPUT_REPOSITORY=${{ inputs.repository }}
+        chmod +x $GITHUB_ACTION_PATH/push.sh
+        $GITHUB_ACTION_PATH/push.sh
+      shell: bash
+
